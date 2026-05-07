@@ -11,15 +11,6 @@
   --font-sans: var(--font-inter), system-ui, sans-serif;
 }
 
-:root {
-  --bg: #FAF6EC;
-  --bg-alt: #ECDFB8;
-  --text: #0B1B3A;
-  --text-soft: #33405E;
-  --accent: #B88A3F;
-  --rule: #D9CB9E;
-}
-
 html {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
@@ -27,7 +18,7 @@ html {
   overflow-y: scroll;
   overscroll-behavior: none;
   height: 100%;
-  background: var(--bg);
+  background: var(--color-bg);
 }
 
 @media (max-width: 768px) {
@@ -38,17 +29,17 @@ html {
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   font-size: clamp(16px, 0.95rem + 0.2vw, 19px);
   line-height: 1.7;
-  font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   min-height: 100%;
 }
 
+/* Section container: full-viewport snap target with alternating background */
 .snap-section {
   scroll-snap-align: start;
   min-height: 100dvh;
@@ -56,45 +47,17 @@ body {
   flex-direction: column;
   position: relative;
 }
-
 .snap-section--alt {
-  background: var(--bg-alt);
+  background: var(--color-bg-alt);
 }
 
-.justify-prose {
-  text-align: justify;
-  text-justify: inter-word;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-}
-
-/* Section divider — subtle gold ornament */
-.section-ornament {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  width: 1px;
-  height: 28px;
-  background: var(--accent);
-  opacity: 0.5;
-}
-
+/* Typography */
 .font-display {
-  font-family: var(--font-eb-garamond), Georgia, serif;
+  font-family: var(--font-display);
   font-feature-settings: "liga", "dlig", "onum";
 }
 
-.h-display {
-  font-family: var(--font-eb-garamond), Georgia, serif;
-  font-weight: 500;
-  letter-spacing: 0.005em;
-  line-height: 1.1;
-  font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
-}
-
 .h-section {
-  font-family: var(--font-eb-garamond), Georgia, serif;
   font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.15;
@@ -102,7 +65,6 @@ body {
 }
 
 .h-card {
-  font-family: var(--font-eb-garamond), Georgia, serif;
   font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.2;
@@ -110,7 +72,7 @@ body {
 }
 
 .wordmark {
-  font-family: var(--font-eb-garamond), Georgia, serif;
+  font-family: var(--font-display);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -119,19 +81,18 @@ body {
 }
 
 .eyebrow {
-  font-family: var(--font-inter), system-ui, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   font-size: 0.7rem;
   font-weight: 500;
-  color: var(--text-soft);
+  color: var(--color-ink-soft);
 }
 
 .section-label {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--text-soft);
+  color: var(--color-ink-soft);
   font-size: 0.7rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -142,44 +103,84 @@ body {
   display: inline-block;
   width: 28px;
   height: 1px;
-  background: var(--accent);
+  background: var(--color-accent);
 }
 
+.dropcap::first-letter {
+  font-family: var(--font-display);
+  font-weight: 500;
+  float: left;
+  font-size: 3.4em;
+  line-height: 0.9;
+  padding-right: 0.08em;
+  padding-top: 0.06em;
+  color: var(--color-ink);
+}
+
+.justify-prose {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* Inline links (mailto etc.) */
 .ulink {
-  color: var(--text);
+  color: var(--color-ink);
   text-decoration: underline;
-  text-decoration-color: var(--accent);
+  text-decoration-color: var(--color-accent);
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
-  transition: color 150ms ease, text-decoration-color 150ms ease;
+  transition:
+    color 150ms ease,
+    text-decoration-color 150ms ease;
 }
-.ulink:hover { color: var(--accent); }
+.ulink:hover {
+  color: var(--color-accent);
+}
 
+/* Areas grid card */
 .area-card {
-  border-top: 1px solid var(--accent);
+  position: relative;
   padding-top: 1rem;
   background: transparent;
-  transition: border-color 150ms ease;
+  transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.area-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 28%;
+  background: var(--color-accent);
+  transition: width 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .area-card:hover {
-  border-top-color: var(--text);
+  transform: translateY(-3px);
 }
-
-.area-num {
-  color: var(--accent);
-  font-family: var(--font-eb-garamond), Georgia, serif;
+.area-card:hover::before {
+  width: 100%;
+}
+.area-card .area-num {
+  color: var(--color-accent);
+  font-family: var(--font-display);
   font-style: italic;
   font-size: 0.95rem;
   letter-spacing: 0.04em;
+  transition: color 250ms ease;
+}
+.area-card:hover .area-num {
+  color: var(--color-ink);
 }
 
-/* Section navigation links — desktop vertical and mobile horizontal */
+/* Section nav — single component, two layouts via media query */
 .nav-link {
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.72rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--text);
+  color: var(--color-ink);
   background: transparent;
   border: 0;
   padding: 6px 8px;
@@ -187,123 +188,66 @@ body {
   transition: color 200ms ease;
   white-space: nowrap;
   font-weight: 500;
-}
-.nav-link:hover {
-  color: var(--accent);
-}
-.nav-link[aria-current="true"] {
-  color: var(--accent);
-}
-
-/* Vertical (desktop) — gold dash slides in on hover/active */
-.nav-vertical .nav-link {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.625rem;
   position: relative;
-}
-.nav-vertical .nav-link::before {
-  content: "";
-  display: inline-block;
-  height: 1px;
-  width: 0;
-  background: var(--accent);
-  transition: width 220ms ease;
-}
-.nav-vertical .nav-link:hover::before,
-.nav-vertical .nav-link[aria-current="true"]::before {
-  width: 22px;
-}
-
-/* Horizontal (mobile) — underline on hover/active */
-.nav-horizontal .nav-link {
-  position: relative;
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  padding: 6px 5px;
-  text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
-.nav-horizontal .nav-link::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 0;
-  height: 1px;
-  background: var(--accent);
-  transform: translateX(-50%);
-  transition: width 220ms ease;
-}
-.nav-horizontal .nav-link:hover::after,
-.nav-horizontal .nav-link[aria-current="true"]::after {
-  width: calc(100% - 8px);
+.nav-link:hover {
+  color: var(--color-accent);
 }
 
-.lang-btn {
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-soft);
-  transition: color 150ms ease;
-  padding: 6px 4px;
-  cursor: pointer;
-}
-.lang-btn[aria-pressed="true"] { color: var(--text); }
-.lang-btn:hover { color: var(--text); }
-
-.lang-divider {
-  color: var(--rule);
-  user-select: none;
-}
-
-.dropcap::first-letter {
-  font-family: var(--font-eb-garamond), Georgia, serif;
-  font-weight: 500;
-  float: left;
-  font-size: 3.4em;
-  line-height: 0.9;
-  padding-right: 0.08em;
-  padding-top: 0.06em;
-  color: var(--text);
-}
-
-.ident-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-}
-.ident-row > .ident {
-  padding: 0.25rem 1.25rem;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  color: var(--text);
-}
-.ident-row > .ident + .ident { border-left: 1px solid var(--accent); }
-@media (max-width: 520px) {
-  .ident-row { flex-direction: column; gap: 0.35rem; }
-  .ident-row > .ident + .ident {
-    border-left: 0;
-    border-top: 1px solid var(--accent);
-    padding-top: 0.6rem;
-    margin-top: 0.25rem;
+/* Mobile: underline grows from center on hover */
+@media (max-width: 768px) {
+  .nav-link {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 6px 5px;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: 0;
+    height: 1px;
+    background: var(--color-accent);
+    transform: translateX(-50%);
+    transition: width 220ms ease;
+  }
+  .nav-link:hover::after {
+    width: calc(100% - 10px);
   }
 }
 
+/* Desktop: gold dash slides in to the left of the label */
+@media (min-width: 769px) {
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+  }
+  .nav-link::before {
+    content: "";
+    display: inline-block;
+    height: 1px;
+    width: 0;
+    background: var(--color-accent);
+    transition: width 220ms ease;
+  }
+  .nav-link:hover::before {
+    width: 22px;
+  }
+}
+
+/* Selection + focus */
 ::selection {
   background: rgba(184, 138, 63, 0.25);
-  color: var(--text);
+  color: var(--color-ink);
 }
 
 :focus-visible {
-  outline: 1px solid var(--accent);
+  outline: 1px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
