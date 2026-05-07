@@ -23,7 +23,6 @@ html {
 
 @media (max-width: 768px) {
   html {
-    scroll-snap-type: y proximity;
     scroll-padding-top: 48px;
   }
 }
