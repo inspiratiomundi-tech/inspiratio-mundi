@@ -7,12 +7,41 @@ const sections = [
   { id: "contact", label: "Kontakt" },
 ];
 
-export function NavButtons() {
-  const scrollTo = (id: string) => {
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+// iOS Safari with `scroll-snap-type: y mandatory` interrupts smooth
+// scrollIntoView mid-animation — the snap engine pulls the page back
+// toward the nearest snap point and you land at the wrong section.
+// Workaround: disable snap before the scroll, re-enable only once the
+// scroll has actually stopped (polling scrollY for stability).
+function smoothScrollToId(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  const html = document.documentElement;
+  const originalSnap = html.style.scrollSnapType;
+  html.style.scrollSnapType = "none";
+
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  let lastY = window.scrollY;
+  let stable = 0;
+  const tick = () => {
+    if (Math.abs(window.scrollY - lastY) < 0.5) {
+      stable += 1;
+      if (stable > 6) {
+        html.style.scrollSnapType = originalSnap;
+        return;
+      }
+    } else {
+      stable = 0;
+    }
+    lastY = window.scrollY;
+    requestAnimationFrame(tick);
   };
+  requestAnimationFrame(tick);
+}
+
+export function NavButtons() {
+  const scrollTo = (id: string) => smoothScrollToId(id);
 
   return (
     <nav
