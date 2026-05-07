@@ -7,36 +7,12 @@ const sections = [
   { id: "contact", label: "Kontakt" },
 ];
 
-// iOS Safari with `scroll-snap-type: y mandatory` interrupts smooth
-// scrollIntoView mid-animation, landing the page on the wrong section.
-// Workaround: disable snap for the duration of the programmatic scroll,
-// then restore it once the scroll ends (scrollend event when supported,
-// always within 1.5s as a safety net so snap can never get stuck off).
-function smoothScrollToId(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-
-  const html = document.documentElement;
-  const originalSnap = html.style.scrollSnapType;
-  html.style.scrollSnapType = "none";
-
-  let restored = false;
-  const restore = () => {
-    if (restored) return;
-    restored = true;
-    html.style.scrollSnapType = originalSnap;
-  };
-
-  if ("onscrollend" in window) {
-    window.addEventListener("scrollend", restore, { once: true });
-  }
-  window.setTimeout(restore, 1500);
-
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 export function NavButtons() {
-  const scrollTo = (id: string) => smoothScrollToId(id);
+  const scrollTo = (id: string) => {
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <nav

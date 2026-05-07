@@ -13,7 +13,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
   scroll-padding-top: 0;
   overflow-y: scroll;
   overscroll-behavior: none;
@@ -38,9 +37,8 @@ body {
   min-height: 100%;
 }
 
-/* Section container: full-viewport snap target with alternating background */
+/* Section container: full-viewport panel with alternating background */
 .snap-section {
-  scroll-snap-align: start;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
